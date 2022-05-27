@@ -1,22 +1,44 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@using CaloriesCounterAppFx.Models
+@using Microsoft.AspNet.Identity
+@model LoginViewModel
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
-
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
+        @Html.AntiForgeryToken()
+        <div class="btn-group">
+            <button type="submit" class="btn btn-outline-primary">Log out</button>
+        </div>
     }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li class="nav-item">@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link me-lg-3" })</li>
-        <li class="nav-item">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link me-lg-3" })</li>
-    </ul>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Login
+        </button>
+        <div class="dropdown-menu">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "px-4 py-3", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+            <div class="mb-3">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 form-label" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "example@domain.com" })
+            </div>
+            <div class="mb-3">
+                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 form-label" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+            </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            }
+            <div class="dropdown-divider"></div>
+            @Html.ActionLink("New around here? Sign up", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "dropdown-item" })
+        </div>
+    </div>
 }

@@ -20,17 +20,31 @@
                 @Html.ActionLink("Calories Counter App", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="bi-list"></i>
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse" id="navbarResponsive">
+            <div class="navbar-collapse collapse d-flex" id="navbarResponsive">
+                <form class="align-self-start">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                </form>
                 <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Diary<span class="caret"></span></a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Understanding calories", "UnderstandCalories", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Podcasts", "Podcasts", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                                @Html.ActionLink("How to use the App", "HowTo", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                    <li class="nav-item">@Html.ActionLink("Food Catalogue", "Index", "FoodCatalogue", new { area = "" }, new { @class = "nav-link me-lg-3" })</li>
                     <li class="nav-item dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown Menu <span class="caret"></span></a>
+                        <a href="#" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Knowledge<span class="caret"></span></a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            @Html.ActionLink("Understanding calories", "UnderstandCalories", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Podcasts", "Podcasts", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                            @Html.ActionLink("How to use the App", "HowTo", "Home", new { area = "" }, new { @class = "dropdown-item" })
                         </div>
                     </li>
                     <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link me-lg-3" })</li>
@@ -41,24 +55,64 @@
         </div>
     </nav>
 
-        <div class="container px-5 firstsection">
-            @RenderBody()
-        </div>
-    <footer class="bg-dark text-center py-5">
-        <div class="container px-5">
-            <div class="text-white-50 small">
-                <div class="mb-2">&copy; Calories Counter App @DateTime.Now.Year. All Rights Reserved.</div>
-                <a href="#!">Privacy</a>
-                <span class="mx-1">&middot;</span>
-                <a href="#!">Terms</a>
-                <span class="mx-1">&middot;</span>
-                <a href="#!">FAQ</a>
+    <div class="container px-5 firstsection">
+        @RenderBody()
+    </div>
+    <div class="container px-5">
+        <footer class="row row-cols-5 py-5 my-5">
+            <div class="col">
+                <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap" /></svg>
+                </a>
+                <p class="text-muted">&copy; 2021</p>
             </div>
-        </div>
-    </footer>
+
+            <div class="col">
+
+            </div>
+
+            <div class="col">
+                <h5>Section</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                </ul>
+            </div>
+
+            <div class="col">
+                <h5>Section</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                </ul>
+            </div>
+
+            <div class="col">
+                <h5>Section</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $('.dropdown-menu input, .dropdown-menu label').click(function (e) {
+            e.stopPropagation();
+        });
+    </script>
 </body>
 </html>
