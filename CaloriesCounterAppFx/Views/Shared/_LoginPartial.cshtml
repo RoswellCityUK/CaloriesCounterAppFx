@@ -1,6 +1,7 @@
 ﻿@using CaloriesCounterAppFx.Models
 @using Microsoft.AspNet.Identity
 @model LoginViewModel
+    
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -13,32 +14,39 @@
 }
 else
 {
-    <div class="btn-group">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="nav-item dropdown d-none d-lg-block">
+        <button class="btn btn-primary dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Login
         </button>
-        <div class="dropdown-menu">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "px-4 py-3", role = "form" }))
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
             {
                 @Html.AntiForgeryToken()
-            <div class="mb-3">
+            <div class="mb-3 dropdown-item">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-2 form-label" })
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "example@domain.com" })
             </div>
-            <div class="mb-3">
+            <div class="mb-3 dropdown-item">
                 @Html.LabelFor(m => m.Password, new { @class = "col-md-2 form-label" })
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
             </div>
-                <div class="mb-3">
-                    <div class="form-check">
-                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
-                        @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
-                    </div>
+            <div class="mb-3 dropdown-item">
+                <div class="form-check">
+                    @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                    @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
                 </div>
-                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+            <button type="submit" class="btn btn-primary ms-3">Sign in</button>
             }
             <div class="dropdown-divider"></div>
             @Html.ActionLink("New around here? Sign up", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "dropdown-item" })
         </div>
+    </div>
+    <div class="nav-item d-lg-none">
+        <a href="@Url.Action("Login", "Account")">
+            <button class="btn btn-primary" role="button">
+                Login
+            </button>
+        </a>
     </div>
 }

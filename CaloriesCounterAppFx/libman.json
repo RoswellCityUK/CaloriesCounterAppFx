@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "Chart.js@3.8.0",
+      "destination": "Scripts/chartjs/",
+      "files": [
+        "chart.js",
+        "helpers.esm.js",
+        "chart.esm.js"
+      ]
+    }
+  ]
+}

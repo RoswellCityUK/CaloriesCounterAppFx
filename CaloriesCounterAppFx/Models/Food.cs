@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
+using System.Web;
 
 namespace CaloriesCounterAppFx.Models
 {
@@ -15,14 +16,14 @@ namespace CaloriesCounterAppFx.Models
         public string GetLocalImage()
         {
             int folder = this.Id / 500;
-            string localImagePath = @"~Content\imgs\products\" + folder + @"\" + this.Id + ".jpg";
+            string localImagePath = "/Content/imgs/products/" + folder + "/" + this.Id + ".jpg";
 
-            if (File.Exists(localImagePath))
+            if (File.Exists(HttpContext.Current.Server.MapPath(localImagePath)))
             {
                 return localImagePath;
             }
 
-            return null;
+            return localImagePath;
         }
     }
 }

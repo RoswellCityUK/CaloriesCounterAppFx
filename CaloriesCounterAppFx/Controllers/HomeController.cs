@@ -12,7 +12,7 @@ namespace CaloriesCounterAppFx.Controllers
         {
             if (Request.IsAuthenticated)
             {
-                return RedirectToAction("Index", "MyDiary");
+                //return RedirectToAction("Index", "MyDiary");
             }
             return View();
         }

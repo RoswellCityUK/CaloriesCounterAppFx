@@ -1,0 +1,254 @@
+﻿@using CaloriesCounterAppFx.Models
+@model FoodCatalogueIndexViewModel
+
+@{
+    ViewBag.Title = "Food Catalogue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="container accordion" id="foodcatalogue-accordion">
+    <div class="row">
+        <div class="col">
+            @using (Html.BeginForm("Index", "FoodCatalogue", FormMethod.Post, new { @class = "input-group mb-3" }))
+            {
+                @Html.TextBox("SearchString", null, new { @class = "form-control", aria_lavel = "SearchString", aria_description = "bassic-addon1", placeholder = "Search" })
+                <button class="btn @(ViewBag.SearchParam == null ? "btn-outline-primary" : "btn-primary")"><i class="bi bi-search me-2"></i>Search</button>
+                <button type="button" class="btn @(ViewBag.CategoryId == null ? "btn-outline-primary" : "btn-primary") dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-funnel me-2"></i>Category
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end fs-6">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <li>
+                            @if (ViewBag.CategoryId != @category.Id)
+                            {
+                                @Html.ActionLink(@category.Name, "Index",
+     new { categoryIdFilter = @category.Id },
+     new { @class = "dropdown-item" })
+                            }
+                            else
+                            {
+                                @Html.ActionLink(@category.Name, "Index",
+     null,
+     new { @class = "dropdown-item active bi ro-x-right" })
+                            }
+
+                        </li>
+                    }
+                </ul>
+                <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end fs-6">
+                    <li>
+                        @{  
+                            string nameParamState = "";
+                            string nameParamLink = "name_asc";
+                            string nameParamIcon = "bi-sort-up";
+                            if (ViewBag.SortParam == "name_asc")
+                            {
+                                nameParamLink = "name_desc";
+                                nameParamState = "active";
+                            }
+                            if (ViewBag.SortParam == "name_desc")
+                            {
+                                nameParamState = "active";
+                                nameParamIcon = "bi-sort-down";
+                            }
+                        }
+                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = nameParamLink })" class="dropdown-item @nameParamState">
+                            Name
+                            <span class="bi @nameParamIcon" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    <li>
+                        @{
+                            string catParamState = "";
+                            string catParamLink = "cat_asc";
+                            string catParamIcon = "bi-sort-up";
+                            if (ViewBag.SortParam == "cat_asc")
+                            {
+                                catParamLink = "cat_desc";
+                                catParamState = "active";
+                            }
+                            if (ViewBag.SortParam == "cat_desc")
+                            {
+                                catParamState = "active";
+                                catParamIcon = "bi-sort-down";
+                            }
+                        }
+                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = catParamLink })" class="dropdown-item @catParamState">
+                            Category
+                            <span class="bi @catParamIcon" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    <li>
+                        @{
+                            string eneParamState = "";
+                            string eneParamLink = "energy_asc";
+                            string eneParamIcon = "bi-sort-up";
+                            if (ViewBag.SortParam == "energy_asc")
+                            {
+                                eneParamLink = "energy_desc";
+                                eneParamState = "active";
+                            }
+                            if (ViewBag.SortParam == "energy_desc")
+                            {
+                                eneParamState = "active";
+                                eneParamIcon = "bi-sort-down";
+                            }
+                        }
+                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = eneParamLink })" class="dropdown-item @eneParamState">
+                            Energy [kcal]
+                            <span class="bi @eneParamIcon" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                </ul>
+            }
+        </div>
+    </div>
+    <div class="row" id="foodCatalogueHeader">
+        <div class="col">
+            @Html.DisplayNameFor(model => model.Foods.FirstOrDefault().Name)
+        </div>
+        <div class="col">
+            @Html.DisplayNameFor(model => model.Foods.FirstOrDefault().Category.Name)
+        </div>
+        <div class="col">
+            Nutrients [ Units / 100g ]
+        </div>
+    </div>
+
+    @foreach (var item in Model.Foods)
+    {
+        <div class="accordion-item">
+            <div class="row accordion-header" data-bs-toggle="collapse" data-bs-target="#accordion-@item.Id" aria-expanded="false" aria-controls="accordion-@item.Id">
+                <div class="col-lg" type="button">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </div>
+                <div class="col-lg">
+                    @item.Category.Name
+                </div>
+                <div class="col-lg">
+                    @item.Nutrients.FirstOrDefault().EnergKcal kcal
+                </div>
+            </div>
+            <div class="row accordion-collapse collapse" id="accordion-@item.Id" aria-labelledby="headingTwo" data-bs-parent="#foodcatalogue-accordion">
+                <div class="col-lg-2">
+                    <div style="background-image: url(@item.GetLocalImage()); width:100%; aspect-ratio: 1; background-size: cover" class="rounded mx-auto border bg-info mx-auto d-block"></div>
+                </div>
+                <div class="col-lg-6 ps-2 pe-2 mt-5 mt-lg-0 mb-5 mb-lg-0">
+                    <ul class="list-group">
+                        <li class="list-group-item" style="border: 0">
+                            Vitamins:
+                            <span class="badge @(item.Nutrients.FirstOrDefault().VitAIU > 0? "bg-success" : "bg-light" )">Vit A</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().VitB6Mg > 0? "bg-success" : "bg-light" )">Vit B6</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().VitB12Μg > 0? "bg-success" : "bg-light" )">Vit B12</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().VitCMg > 0? "bg-success" : "bg-light" )">Vit C</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().VitDΜg > 0? "bg-success" : "bg-light" )">Vit D</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().VitEMg > 0? "bg-success" : "bg-light" )">Vit E</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().VitKΜg > 0? "bg-success" : "bg-light" )">Vit K</span>
+                        </li>
+                        <li class="list-group-item" style="border: 0">
+                            Elements:
+                            <span class="badge @(item.Nutrients.FirstOrDefault().CalciumMg > 0? "bg-success" : "bg-light" )">Calcium</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().IronMg > 0? "bg-success" : "bg-light" )">Iron</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().MagnesiumMg > 0? "bg-success" : "bg-light" )">Magnesium</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().PhosphorusMg > 0? "bg-success" : "bg-light" )">Phosphorus</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().PotassiumMg > 0? "bg-success" : "bg-light" )">Potassium</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().SodiumMg > 0? "bg-success" : "bg-light" )">Sodium</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().ZincMg > 0? "bg-success" : "bg-light" )">Zinc</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().CopperMg > 0? "bg-success" : "bg-light" )">Copper</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().ManganeseMg > 0? "bg-success" : "bg-light" )">Manganese</span>
+                            <span class="badge @(item.Nutrients.FirstOrDefault().SeleniumΜg > 0? "bg-success" : "bg-light" )">Selenium</span>
+                        </li>
+                        <li class="list-group-item" style="border: 0">Cholesterol: <span class="badge @(item.Nutrients.FirstOrDefault().CholestrlMg > 0? "bg-warning" : "bg-success" )">@item.Nutrients.FirstOrDefault().CholestrlMg mg</span></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <div class="chart-container" style="position: relative; max-height: 20vh">
+                        <canvas id="myChart_@item.Id"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg"></div>
+                <div class="col-lg-8 mt-5">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Portion [in grams]:</span>
+                        <input type="text" class="form-control" placeholder="(eg. 100)" aria-label="Portion" aria-describedby="basic-addon1">
+                        <button class="btn btn-primary"><i class="bi bi-calendar-plus me-2"></i>Add to Diary</button>
+                    </div>
+                </div>
+                <div class="col-lg"></div>
+                <script>
+                        const data_@item.Id = {
+                            labels: [
+                                'Fat [@item.Nutrients.FirstOrDefault().LipidTotG g]',
+                                'Proteins [@item.Nutrients.FirstOrDefault().ProteinG g]',
+                                'Net carbs [@item.Nutrients.FirstOrDefault().CarbohydrtG g]',
+                                'Sugars [@item.Nutrients.FirstOrDefault().SugarTotG g]',
+                                'Fiber [@item.Nutrients.FirstOrDefault().FiberTDG g]',
+                                'Water [@item.Nutrients.FirstOrDefault().WaterG g]'
+                            ],
+                            datasets: [{
+                                label: 'My First Dataset',
+                                data: [@item.Nutrients.FirstOrDefault().LipidTotG, @item.Nutrients.FirstOrDefault().ProteinG, @item.Nutrients.FirstOrDefault().CarbohydrtG, @item.Nutrients.FirstOrDefault().SugarTotG, @item.Nutrients.FirstOrDefault().FiberTDG, @item.Nutrients.FirstOrDefault().WaterG],
+                                backgroundColor: [
+                                    'rgb(255, 99, 132)',
+                                    'rgb(54, 162, 235)',
+                                    'rgb(255, 205, 86)',
+                                    'rgb(200, 200, 150)',
+                                    'rgb(162, 205, 105)',
+                                    'rgb(14, 190, 190)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        };
+
+                        const config_@item.Id = {
+                            type: 'bar',
+                            data: data_@item.Id,
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                ratio: 2,
+                                autoPadding: true,
+                                indexAxis: 'y',
+                                plugins: {
+                                    legend: {
+                                        display: false,
+                                    },
+                                    tooltip: {
+                                        enabled: false,
+                                    }
+                                }
+                            }
+                        };
+                </script>
+                <script>
+                        const myChart_@item.Id = new Chart(
+                            document.getElementById('myChart_@item.Id'),
+                            config_@item.Id
+                        );
+                </script>
+            </div>
+        </div>
+    }
+
+</div>
+<script>
+    function beforePrintHandler() {
+        for (let id in Chart.instances) {
+            Chart.instances[id].resize();
+        }
+    }
+
+    window.addEventListener('beforeprint', () => {
+        myChart.resize(600, 600);
+    });
+    window.addEventListener('afterprint', () => {
+        myChart.resize();
+    });
+</script>

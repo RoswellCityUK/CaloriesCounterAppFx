@@ -10,6 +10,7 @@ namespace CaloriesCounterAppFx.Models
         public DbSet<FoodNutrient> FoodNutrients { get; set; }
         public DbSet<ConsumedCalories> ConsumedCaloriesTable { get; set; }
         public DbSet<ContactFormMessage> ContactFormMessages { get; set; }
+        public object ApplicationUser { get; internal set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
