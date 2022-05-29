@@ -8,11 +8,11 @@ namespace CaloriesCounterAppFx.Models
 {
     public class BaseViewModel : LoginViewModel
     {
-        public CurrentUser UserData;
+        public CurrentUser UserData { get; set; }
     }
     public class CurrentUser
     {
-        public string Name;
-        public string ConsumedCalories;
+        public string Name { get; set; }
+        public string ConsumedCalories { get; set; }
     }
 }

@@ -7,12 +7,34 @@
 }
 
 <h2>@ViewBag.Title</h2>
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-warning" role="alert" id="success-alert">
+        @TempData["ErrorMsg"]
+    </div>
+    <script>
+        setTimeout(function () {
+            bootstrap.Alert.getOrCreateInstance(document.querySelector("#success-alert")).close();
+        }, 3000)
+    </script>
+}
+@if (TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success" role="alert" id="success-alert">
+        @TempData["SuccessMsg"]
+    </div>
+    <script>
+        setTimeout(function () {
+            bootstrap.Alert.getOrCreateInstance(document.querySelector("#success-alert")).close();
+        }, 3000)
+    </script>
+}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="container accordion" id="foodcatalogue-accordion">
     <div class="row">
         <div class="col">
-            @using (Html.BeginForm("Index", "FoodCatalogue", FormMethod.Post, new { @class = "input-group mb-3" }))
+            @using (Html.BeginForm("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, categoryIdFilter = ViewBag.CategoryId }, FormMethod.Post, new { @class = "input-group mb-3" }))
             {
                 @Html.TextBox("SearchString", null, new { @class = "form-control", aria_lavel = "SearchString", aria_description = "bassic-addon1", placeholder = "Search" })
                 <button class="btn @(ViewBag.SearchParam == null ? "btn-outline-primary" : "btn-primary")"><i class="bi bi-search me-2"></i>Search</button>
@@ -26,25 +48,25 @@
                             @if (ViewBag.CategoryId != @category.Id)
                             {
                                 @Html.ActionLink(@category.Name, "Index",
-     new { categoryIdFilter = @category.Id },
-     new { @class = "dropdown-item" })
+                                     new { categoryIdFilter = @category.Id, searchString = ViewBag.SearchParam, sortOrder = ViewBag.SortParam },
+                                     new { @class = "dropdown-item" })
                             }
                             else
                             {
                                 @Html.ActionLink(@category.Name, "Index",
-     null,
-     new { @class = "dropdown-item active bi ro-x-right" })
+                                     new { searchString = ViewBag.SearchParam, sortOrder = ViewBag.SortParam },
+                                     new { @class = "dropdown-item active bi ro-x-right" })
                             }
 
                         </li>
                     }
                 </ul>
-                <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-sm @(ViewBag.SortParam == null || ViewBag.SortParam == "name_asc" ? "btn-outline-primary" : "btn-primary") dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     Sort by
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end fs-6">
                     <li>
-                        @{  
+                        @{
                             string nameParamState = "";
                             string nameParamLink = "name_asc";
                             string nameParamIcon = "bi-sort-up";
@@ -59,7 +81,7 @@
                                 nameParamIcon = "bi-sort-down";
                             }
                         }
-                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = nameParamLink })" class="dropdown-item @nameParamState">
+                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = nameParamLink, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId })" class="dropdown-item @nameParamState">
                             Name
                             <span class="bi @nameParamIcon" aria-hidden="true"></span>
                         </a>
@@ -80,7 +102,7 @@
                                 catParamIcon = "bi-sort-down";
                             }
                         }
-                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = catParamLink })" class="dropdown-item @catParamState">
+                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = catParamLink, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId })" class="dropdown-item @catParamState">
                             Category
                             <span class="bi @catParamIcon" aria-hidden="true"></span>
                         </a>
@@ -101,7 +123,7 @@
                                 eneParamIcon = "bi-sort-down";
                             }
                         }
-                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = eneParamLink })" class="dropdown-item @eneParamState">
+                        <a href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = eneParamLink, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId })" class="dropdown-item @eneParamState">
                             Energy [kcal]
                             <span class="bi @eneParamIcon" aria-hidden="true"></span>
                         </a>
@@ -173,15 +195,28 @@
                         <canvas id="myChart_@item.Id"></canvas>
                     </div>
                 </div>
-                <div class="col-lg"></div>
-                <div class="col-lg-8 mt-5">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">Portion [in grams]:</span>
-                        <input type="text" class="form-control" placeholder="(eg. 100)" aria-label="Portion" aria-describedby="basic-addon1">
-                        <button class="btn btn-primary"><i class="bi bi-calendar-plus me-2"></i>Add to Diary</button>
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="col-lg"></div>
+                    <div class="col-lg-8 mt-5">
+                        @using (Html.BeginForm("AddToDiary", "FoodCatalogue", FormMethod.Post, new { @class = "input-group mb-3" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <span class="input-group-text" id="basic-addon1">Portion [in grams]:</span>
+                            @Html.Hidden("FoodId", item.Id, new { aria_lavel = "FoodId", aria_description = "bassic-addon1" })
+                            @Html.TextBox("PortionAmount", null, new { @class = "form-control", aria_lavel = "PortionAmount", aria_description = "bassic-addon1", placeholder = "(eg. 100)" })
+                            <button class="btn btn-primary" type="submit"><i class="bi bi-calendar-plus me-2"></i>Add to Diary</button>
+                        }
+                    </div><div class="col-lg"></div>
+                }
+                else
+                {
+                    <div class="col-lg"></div>
+                    <div class="col-lg mt-5">
+                        <a href="@Url.Action("Login", "Account")"><button class="btn btn-primary">Login to start tracking your diet.</button></a>
                     </div>
-                </div>
-                <div class="col-lg"></div>
+                    <div class="col-lg"></div>
+                }
                 <script>
                         const data_@item.Id = {
                             labels: [
@@ -233,6 +268,48 @@
                             config_@item.Id
                         );
                 </script>
+            </div>
+        </div>
+    }
+    <div class="row mt-3">
+        <div class="col text-center">
+            Records from @(ViewBag.SkipRows + 1) to @(ViewBag.CurrentPage == ViewBag.NumberOfPages? @ViewBag.NumberOfRecords : ViewBag.CurrentPage * ViewBag.PageSize) of @ViewBag.NumberOfRecords total.
+        </div>
+    </div>
+    @if (ViewBag.NumberOfpages != 1)
+    {
+        <div class="row mt-3">
+            <div class="col text-center">
+                <nav aria-label="Pagination">
+                    <ul class="pagination justify-content-center">
+                        @if (ViewBag.CurrentPage != 1)
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId , page = 1 })">First</a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId , page = ViewBag.CurrentPage - 1 })" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        }
+                        @{ int startPage = 1;
+                            int endPage = 5;
+                            if (ViewBag.CurrentPage > 3)
+                            {
+                                startPage = ViewBag.CurrentPage - 2;
+                                endPage = ViewBag.CurrentPage + 2;
+                            }
+                            if (endPage > ViewBag.NumberOfPages)
+                            {
+                                endPage = ViewBag.NumberOfPages;
+                            }
+                            for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item @(i==ViewBag.CurrentPage? "active": "")"><a class="page-link" href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId , page = i })">@i</a></li>
+                            }
+                        }
+                        @if (ViewBag.CurrentPage != ViewBag.NumberOfPages)
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId , page = ViewBag.CurrentPage + 1 })" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, searchString = ViewBag.SearchParam, categoryIdFilter = ViewBag.CategoryId , page = ViewBag.NumberOfPages })">Last</a></li>
+                        }
+                    </ul>
+                </nav>
             </div>
         </div>
     }
