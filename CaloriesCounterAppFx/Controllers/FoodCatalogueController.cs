@@ -65,7 +65,7 @@ namespace CaloriesCounterAppFx.Controllers
             int numberOfPages = numberOfRecords / pageSize;
             if((numberOfRecords % pageSize) != 0)
             {
-                numberOfPages = numberOfPages + 1;
+                numberOfPages++;
             }
             if (pageNumber < 1)
                 pageNumber = 1;
@@ -120,8 +120,6 @@ namespace CaloriesCounterAppFx.Controllers
 
                 return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)
         {

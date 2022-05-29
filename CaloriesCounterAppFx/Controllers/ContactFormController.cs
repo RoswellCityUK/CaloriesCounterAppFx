@@ -50,8 +50,6 @@ namespace CaloriesCounterAppFx.Controllers
 
                 return View(contactFormMessage);
             }
-
-            return View(contactFormMessage);
         }
 
         protected override void Dispose(bool disposing)
