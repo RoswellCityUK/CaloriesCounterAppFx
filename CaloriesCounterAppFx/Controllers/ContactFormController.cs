@@ -10,7 +10,7 @@ using CaloriesCounterAppFx.Models;
 
 namespace CaloriesCounterAppFx.Controllers
 {
-    public class ContactFormController : Controller
+    public class ContactFormController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 

@@ -15,11 +15,12 @@ namespace CaloriesCounterAppFx.Controllers
         protected virtual TModel CreateModel<TModel>() where TModel : BaseViewModel, new()
         {
             TModel model = new TModel();
-            //var userName = User.Identity.Name;
-            //var applicationUser = db.Users.FirstOrDefault(m => m.UserName == userName);
-
-            // Set common properties
-            //model.Name = applicationUser.Nome;
+            if(User.Identity.IsAuthenticated)
+            {
+                var userName = User.Identity.Name;
+                model.UserData = new CurrentUser();
+                model.UserData.Name = userName;
+            }
 
             return model;
         }

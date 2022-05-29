@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using CaloriesCounterAppFx.Models
+@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -33,10 +35,17 @@
                     {
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Diary<span class="caret"></span></a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @Html.ActionLink("Understanding calories", "UnderstandCalories", "Home", new { area = "" }, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Podcasts", "Podcasts", "Home", new { area = "" }, new { @class = "dropdown-item" })
-                                @Html.ActionLink("How to use the App", "HowTo", "Home", new { area = "" }, new { @class = "dropdown-item" })
+                            <div class="dropdown-menu text-nowrap" aria-labelledby="navbarDropdown">
+                                @Html.ActionLink("Your diary", "Index", "MyDiary", new { area = "" }, new { @class = "dropdown-item" })
+                                <a href="@Url.Action("Index", "FoodCatalogue")" class="dropdown-item"><span class="bi bi-plus text-success"></span> Add Food</a>
+                                <hr class="dropdown-divider">
+                                <span class="dropdown-item-text text-center">Consumed today</span>
+                                <span class="dropdown-item-text text-center fw-bold fs-3">@ApplicationUserData.GetUserCaloriesConsumedToday(User.Identity.GetUserId())</span>
+                                <span class="dropdown-item-text text-center text-muted">kcal</span>
+                                <hr class="dropdown-divider">
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <span class="bi bi-x text-danger"></span> Reset
+                                </button>
                             </div>
                         </li>
                     }
@@ -109,7 +118,23 @@
             </footer>
         </div>
     </div>
-
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Reset today's diary</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    You are about to reset today's calorie counter. Which means all of today's entries will be removed from your journal. Are you sure you want to do this?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="@Url.Action("Reset", "MyDiary")"><button type="button" class="btn btn-danger">Confirm</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
@@ -117,6 +142,7 @@
         $('.dropdown-menu input, .dropdown-menu label').click(function (e) {
             e.stopPropagation();
         });
+
     </script>
 </body>
 </html>

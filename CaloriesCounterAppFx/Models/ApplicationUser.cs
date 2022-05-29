@@ -3,6 +3,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -32,6 +35,26 @@ namespace CaloriesCounterAppFx.Models
             {
                 return FirstName + " " + LastName;
             }
+        }
+    }
+    public static class ApplicationUserData
+    {
+        public static double GetUserCaloriesConsumedToday(string currentUserId)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            double caloriesAmount = 0;
+
+            var currentUser = db.Users.Include(u => u.ConsumedCalories).FirstOrDefault(x => x.Id == currentUserId);
+
+
+            foreach (ConsumedCalories calories in currentUser.ConsumedCalories.AsQueryable().Where(c => c.DateAdded.Date == System.DateTime.Today.Date).ToList())
+            {
+                if (calories.DateAdded.Date == System.DateTime.Today.Date)
+                {
+                    caloriesAmount += ((double)calories.Food.Nutrients[0].EnergKcal / 100) * calories.Amount;
+                }
+            }
+            return caloriesAmount;
         }
     }
 }

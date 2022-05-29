@@ -1,0 +1,12 @@
+﻿@using CaloriesCounterAppFx.Models
+@model MyDiaryViewModel
+@{
+    ViewBag.Title = "My Diary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>My Diary</h2>
+@Model.Date
+@Model.ConsumedCaloriesOnDay.Count
+@Model.ConsumedCaloriesHistory.Count
+
