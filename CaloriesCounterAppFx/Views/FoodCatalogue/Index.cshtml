@@ -7,6 +7,9 @@
 }
 
 <h2>@ViewBag.Title</h2>
+<!--
+Elements used to show some of the System Messages.    
+-->
 @if (TempData["ErrorMsg"] != null)
 {
     <div class="alert alert-warning" role="alert" id="success-alert">
@@ -34,6 +37,9 @@
 <div class="container accordion" id="foodcatalogue-accordion">
     <div class="row">
         <div class="col">
+            <!--
+            Search, filter and sort bar for Food Catalog
+            -->
             @using (Html.BeginForm("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, categoryIdFilter = ViewBag.CategoryId }, FormMethod.Post, new { @class = "input-group mb-3" }))
             {
                 @Html.TextBox("SearchString", null, new { @class = "form-control", aria_lavel = "SearchString", aria_description = "bassic-addon1", placeholder = "Search" })

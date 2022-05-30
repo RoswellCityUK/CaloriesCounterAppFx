@@ -2,6 +2,7 @@
 
 namespace CaloriesCounterAppFx.Models
 {
+    //Entity Class for Food Nutrient data
     public class FoodNutrient
     {
         [Key]

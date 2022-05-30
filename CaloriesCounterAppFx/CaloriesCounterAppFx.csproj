@@ -210,7 +210,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\ConsumedCaloriesController.cs" />
     <Compile Include="Controllers\ContactFormController.cs" />
     <Compile Include="Controllers\FoodCatalogueController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -256,6 +255,7 @@
       <DependentUpon>202205301904006_AddingNewsletterToContactForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ViewModels\ConsumedCaloriesHistoryViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ConsumedCalories.cs" />
@@ -265,7 +265,7 @@
     <Compile Include="Models\FoodCategory.cs" />
     <Compile Include="Models\FoodNutrient.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="ViewModels\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -386,11 +386,6 @@
     <Content Include="Views\Foods\Index.cshtml" />
     <Content Include="Views\ContactForm\Index.cshtml" />
     <Content Include="Views\FoodCatalogue\Index.cshtml" />
-    <Content Include="Views\ConsumedCalories\Create.cshtml" />
-    <Content Include="Views\ConsumedCalories\Delete.cshtml" />
-    <Content Include="Views\ConsumedCalories\Details.cshtml" />
-    <Content Include="Views\ConsumedCalories\Edit.cshtml" />
-    <Content Include="Views\ConsumedCalories\Index.cshtml" />
     <Content Include="Views\MyDiary\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

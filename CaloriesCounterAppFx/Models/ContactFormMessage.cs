@@ -6,6 +6,7 @@ using System.Web;
 
 namespace CaloriesCounterAppFx.Models
 {
+    //Class responsible for sending and keeping data from Contact Form
     public class ContactFormMessage
     {
         [Key]

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace CaloriesCounterAppFx.Models
 {
+    //View Model for passing data between My Diary Controller <-> View
     public class MyDiaryViewModel : BaseViewModel
     {
         public DateTime Date { get; set; }
@@ -18,6 +19,6 @@ namespace CaloriesCounterAppFx.Models
         public double WaterOnDay { get; set; }
         public int WeightOnDay { get; set; }
         public List<ConsumedCalories> ConsumedCaloriesOnDay { get; set; }
-        public List<ConsumedCaloriesHistory> ConsumedCaloriesHistory { get; set; }
+        public List<ConsumedCaloriesHistoryViewModel> ConsumedCaloriesHistory { get; set; }
     }
 }

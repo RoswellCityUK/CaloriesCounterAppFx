@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CaloriesCounterAppFx.Models
 {
+    //Entity Class for Food Category
     public class FoodCategory
     {
         [Key]

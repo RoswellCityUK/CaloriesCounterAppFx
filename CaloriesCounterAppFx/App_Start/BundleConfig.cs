@@ -14,6 +14,7 @@ namespace CaloriesCounterAppFx
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
+            // JS script that renders Charts and Diagrams in food catalog
             bundles.Add(new Bundle("~/bundles/chartjs").Include(
                         "~/Scripts/chartjs/chart.js"));
 

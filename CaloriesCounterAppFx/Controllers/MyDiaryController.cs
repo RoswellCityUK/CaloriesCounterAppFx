@@ -53,7 +53,7 @@ namespace CaloriesCounterAppFx.Controllers
                 model.WeightOnDay += calories.Amount;
             }
 
-            model.ConsumedCaloriesHistory = model.User.ConsumedCalories.AsQueryable().OrderByDescending(c => c.DateAdded).GroupBy(c => c.DateAdded.Date).Select(x => new ConsumedCaloriesHistory { Date = x.Key, EnergySumOnDate = x.Sum(e => e.Food.Nutrients.FirstOrDefault().EnergKcal / 100 * e.Amount) }).ToList();
+            model.ConsumedCaloriesHistory = model.User.ConsumedCalories.AsQueryable().OrderByDescending(c => c.DateAdded).GroupBy(c => c.DateAdded.Date).Select(x => new ConsumedCaloriesHistoryViewModel { Date = x.Key, EnergySumOnDate = x.Sum(e => e.Food.Nutrients.FirstOrDefault().EnergKcal / 100 * e.Amount) }).ToList();
 
             return View(model);
         }

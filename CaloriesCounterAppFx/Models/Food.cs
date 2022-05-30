@@ -6,6 +6,7 @@ using System.Web;
 
 namespace CaloriesCounterAppFx.Models
 {
+    //Entity Class responsible for keeping food data structured
     public class Food
     {
         [Key]
@@ -13,6 +14,7 @@ namespace CaloriesCounterAppFx.Models
         public string Name { get; set; }
         public virtual FoodCategory Category { get; set; }
         public virtual List<FoodNutrient> Nutrients { get; set; }
+        //Method used in scraping images from google search and confirming if it was downloaded to local folder correctly. Unused at the moment.
         public string GetLocalImage()
         {
             int folder = this.Id / 500;
