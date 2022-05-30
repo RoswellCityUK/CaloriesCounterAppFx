@@ -22,14 +22,15 @@
                 <a href="@Url.Action("Index", "Home")" title="Calories Counter App" class="navbar-brand">
                     <img alt="CaloriesCounter App" src="@Url.Content("~/Content/imgs/calapplogo.svg")" height="50px">
                 </a>
+                <a href="javascript:history.back()" class="text-reset floating-back-button d-flex align-items-center justify-content-center"><i class="bi bi-skip-backward-circle fs-1"></i></a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse" id="navbarResponsive">
                 <!--<form class="align-self-start mt-5 mt-lg-0">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                </form>-->
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            </form>-->
                 <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
                     @if (Request.IsAuthenticated)
                     {
@@ -53,6 +54,7 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Knowledge<span class="caret"></span></a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @Html.ActionLink("Knowledge centre", "KnowledgeBase", "Home", new { area = "" }, new { @class = "dropdown-item" })
                             @Html.ActionLink("Understanding calories", "UnderstandCalories", "Home", new { area = "" }, new { @class = "dropdown-item" })
                             @Html.ActionLink("Podcasts", "Podcasts", "Home", new { area = "" }, new { @class = "dropdown-item" })
                             @Html.ActionLink("How to use the App", "HowTo", "Home", new { area = "" }, new { @class = "dropdown-item" })
@@ -71,48 +73,43 @@
     </div>
     <div class="bg-light">
         <div class="container">
-            <footer class="row row-cols-5 py-5 my-5">
-                <div class="col">
+            <footer class="row py-5 my-5 px-5">
+                <div class="col-lg-3">
                     <a href="@Url.Action("Index", "Home")" title="Calories Counter App" class="navbar-brand">
                         <img alt="CaloriesCounter App" src="@Url.Content("~/Content/imgs/calapplogo.svg")" height="50px">
                     </a>
-                    <p class="text-muted mt-5">&copy; 2022 - Tomasz Grabowski</p>
+                    <p class="text-muted mt-5 fs-6">&copy; 2022 - Tomasz Grabowski</p>
                 </div>
 
-                <div class="col">
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="col-lg">
+                        <div class="nav flex-column rounded py-3 border rounded my-3 my-lg-0 bg-white">
+                            <span class="dropdown-item-text text-center">Consumed today</span>
+                            <span class="dropdown-item-text text-center fw-bold fs-3">@ApplicationUserData.GetUserCaloriesConsumedToday(User.Identity.GetUserId())</span>
+                            <span class="dropdown-item-text text-center text-muted">kcal</span>
+                            <a type="button" class="text-center link-dark mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <span class="bi bi-x text-danger"></span> Reset
+                            </a>
+                        </div>
+                    </div>
+                }
 
-                </div>
-
-                <div class="col">
-                    <h5>Section</h5>
+                <div class="col-lg-3">
+                    <h5>Menu</h5>
                     <ul class="nav flex-column">
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <h5>Section</h5>
-                    <ul class="nav flex-column">
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
-                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <li class="nav-item mb-2">@Html.ActionLink("Your diary", "Index", "MyDiary", new { area = "" }, new { @class = "nav-link p-0 text-muted" })</li>
+                        }
+                        else
+                        {
+                            <li class="nav-item mb-2">@Html.ActionLink("Homepage", "Index", "Home", new { area = "" }, new { @class = "nav-link p-0 text-muted" })</li>
+                        }
+                        <li class="nav-item mb-2">@Html.ActionLink("Knowledge centre", "KnowledgeBase", "Home", new { area = "" }, new { @class = "nav-link p-0 text-muted" })</li>
+                        <li class="nav-item mb-2">@Html.ActionLink("Food Catalogue", "Index", "FoodCatalogue", new { area = "" }, new { @class = "nav-link p-0 text-muted" })</li>
+                        <li class="nav-item mb-2">@Html.ActionLink("About Developer", "About", "Home", new { area = "" }, new { @class = "nav-link p-0 text-muted" })</li>
+                        <li class="nav-item mb-2">@Html.ActionLink("Contact", "Index", "ContactForm", new { area = "" }, new { @class = "nav-link p-0 text-muted" })</a></li>
                     </ul>
                 </div>
             </footer>

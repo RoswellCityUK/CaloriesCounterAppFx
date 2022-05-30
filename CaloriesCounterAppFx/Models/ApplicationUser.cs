@@ -36,6 +36,7 @@ namespace CaloriesCounterAppFx.Models
                 return FirstName + " " + LastName;
             }
         }
+        public bool IsRegisteredForNewsletter { get; set; }
     }
     public static class ApplicationUserData
     {

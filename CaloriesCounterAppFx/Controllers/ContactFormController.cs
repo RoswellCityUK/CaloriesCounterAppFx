@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CaloriesCounterAppFx.Models;
+using Microsoft.AspNet.Identity;
 
 namespace CaloriesCounterAppFx.Controllers
 {
@@ -22,7 +23,7 @@ namespace CaloriesCounterAppFx.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index([Bind(Include = "Id,From,Subject,Message")] ContactFormMessage contactFormMessage)
+        public ActionResult Index([Bind(Include = "Id,From,Subject,Message,RegisterForNewsletter")] ContactFormMessage contactFormMessage)
         {
             contactFormMessage.To = "admin@localhost";
             contactFormMessage.SendingDate = DateTime.Now;
@@ -31,6 +32,11 @@ namespace CaloriesCounterAppFx.Controllers
             {
                 TempData["Success"] = "Message sent successfully! Congratulations!";
                 db.ContactFormMessages.Add(contactFormMessage);
+                if (!String.IsNullOrEmpty(User.Identity.GetUserId()) && contactFormMessage.RegisterForNewsletter)
+                {
+                    var currentId = User.Identity.GetUserId();
+                    db.Users.FirstOrDefault(u => u.Id == currentId).IsRegisteredForNewsletter = true;
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

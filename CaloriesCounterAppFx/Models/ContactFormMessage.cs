@@ -23,6 +23,8 @@ namespace CaloriesCounterAppFx.Models
         [DataType(DataType.Text)]
         public string Message { get; set; }
         public DateTime SendingDate { get; set; }
+        [Display(Name = "Subscribe for the Healthy Calories Newsletter")]
+        public bool RegisterForNewsletter { get; set; }
 
     }
 }

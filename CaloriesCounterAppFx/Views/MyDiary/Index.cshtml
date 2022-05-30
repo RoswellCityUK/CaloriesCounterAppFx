@@ -6,7 +6,87 @@
 }
 
 <h2>My Diary</h2>
-@Model.Date
-@Model.ConsumedCaloriesOnDay.Count
-@Model.ConsumedCaloriesHistory.Count
-
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-lg">
+            <span class="fw-bold fs-5 align-middle">Calories consumption <span class="text-muted fs-6 fw-normal">(@Model.Date.Day/@Model.Date.Month/@Model.Date.Year - @Model.Date.DayOfWeek)</span></span>
+        </div>
+        <div class="col-lg-2 text-end d-flex align-content-end text-nowrap text-end">
+            <a href="@Url.Action("Index", "FoodCatalogue")" class="text-decoration-none align-self-center"><span class="bi bi-plus text-success"></span> Add Food</a>
+        </div>
+    </div>
+    <div class="row border rounded mt-1 mb-3 p-2 pt-4 pb-4">
+        <div class="col-lg-4">
+            <ul class="list-unstyled text-center mb-0">
+                <li>Consumed:</li>
+                <li class="fw-bold fs-3">@Model.EnergyOnDay</li>
+                <li class="text-muted">kcal</li>
+                @if (Model.Date.Date == DateTime.Today.Date)
+                {
+                    <li class="mt-4">
+                        <a href="#exampleModal" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="text-decoration-none link-dark"><span class="bi bi-x text-danger"></span>Reset</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-lg">
+            <ul class="list-unstyled ms-3 mt-3 mt-lg-0">
+                <li><span class="fw-bold">Total food consumed:</span> @Model.WeightOnDay g</li>
+                <li><span class="fw-bold">Proteins:</span> @Model.ProteinOnDay g</li>
+                <li><span class="fw-bold">Net Carbs:</span> @Model.CarbsOnDay g</li>
+                <li><span class="fw-bold">Fats:</span> @Model.FatOnDay g</li>
+                <li><span class="fw-bold">Water:</span> @Model.WaterOnDay g</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row border rounded p-3 pb-0">
+        <div class="col">
+            @if (Model.ConsumedCaloriesOnDay.Count > 0)
+            {
+                foreach (ConsumedCalories calories in Model.ConsumedCaloriesOnDay)
+                {
+                    <div class="row border border-light rounded p-2 mb-3">
+                        <div class="col">@calories.Food.Name</div>
+                        <div class="col text-center">@calories.Amount g</div>
+                        <div class="col text-end">@((calories.Food.Nutrients.FirstOrDefault().EnergKcal / 100) * calories.Amount) kcal</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="row border border-light rounded p-2 mb-3">
+                    <div class="col text-center text-warning">No food was added to today's Diary</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg">
+            <span class="fw-bold fs-5 align-middle">Calories history</span>
+        </div>
+    </div>
+    <div class="row border rounded p-3 pb-0">
+        <div class="col">
+            @if (Model.ConsumedCaloriesHistory.Count > 0)
+            {
+                foreach (var calories in Model.ConsumedCaloriesHistory)
+                {
+                <a href="@Url.Action("Index", "MyDiary", new { dateDayParam = calories.Date.Day, dateMonthParam = calories.Date.Month, dateYearParam = calories.Date.Year})" class="text-decoration-none">
+                    <div class="row border border-light rounded p-2 mb-3">
+                        <div class="col">@calories.Date.Day/@calories.Date.Month/@calories.Date.Year - @calories.Date.DayOfWeek </div>
+                        <div class="col text-end">@calories.EnergySumOnDate kcal</div>
+                    </div>
+                </a>
+                }
+            }
+            else
+            {
+                <div class="row border border-light rounded p-2 mb-3">
+                    <div class="col text-center text-warning">No food was added to Diary ever!</div>
+                </div>
+            }
+        </div>
+     </div>
+</div>

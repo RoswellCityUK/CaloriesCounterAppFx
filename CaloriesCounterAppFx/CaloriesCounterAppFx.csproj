@@ -251,6 +251,10 @@
     <Compile Include="Migrations\202205291834320_MovingBack.Designer.cs">
       <DependentUpon>202205291834320_MovingBack.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202205301904006_AddingNewsletterToContactForm.cs" />
+    <Compile Include="Migrations\202205301904006_AddingNewsletterToContactForm.Designer.cs">
+      <DependentUpon>202205301904006_AddingNewsletterToContactForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -287,10 +291,16 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\imgs\addtodiary.jpg" />
     <Content Include="Content\imgs\avatar.mp4" />
+    <Content Include="Content\imgs\contact.jpg" />
     <Content Include="Content\imgs\food.jpg" />
+    <Content Include="Content\imgs\foodcatalogue.jpg" />
+    <Content Include="Content\imgs\fooddiary.jpg" />
     <Content Include="Content\imgs\guide.jpg" />
     <Content Include="Content\imgs\listener.jpg" />
+    <Content Include="Content\imgs\resetcounter.jpg" />
+    <Content Include="Content\imgs\signup.jpg" />
     <Content Include="Content\podcasts\5_2_Diet_Podcast_Ep_10_Simones_guide_to_losing_weight_with_a_disability.mp3" />
     <Content Include="Content\podcasts\5_2_Diet_Podcast_Ep_11_Sharons_quest_to_lose_11_stone_or_70kg.mp3" />
     <Content Include="Content\podcasts\5_2_Diet_Podcast_Ep_12_Trudies_success_after_27_years_of_yoyo_dieting.mp3" />
@@ -385,7 +395,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="lib\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
@@ -439,6 +448,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202205291834320_MovingBack.resx">
       <DependentUpon>202205291834320_MovingBack.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205301904006_AddingNewsletterToContactForm.resx">
+      <DependentUpon>202205301904006_AddingNewsletterToContactForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
