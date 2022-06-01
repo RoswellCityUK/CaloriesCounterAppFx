@@ -11,9 +11,12 @@
         <div class="col-lg">
             <span class="fw-bold fs-5 align-middle">Calories consumption <span class="text-muted fs-6 fw-normal">(@Model.Date.Day/@Model.Date.Month/@Model.Date.Year - @Model.Date.DayOfWeek)</span></span>
         </div>
-        <div class="col-lg-2 text-end d-flex align-content-end text-nowrap text-end">
-            <a href="@Url.Action("Index", "FoodCatalogue")" class="text-decoration-none align-self-center"><span class="bi bi-plus text-success"></span> Add Food</a>
-        </div>
+        @if (Model.Date.Date == DateTime.Today.Date)
+        {
+            <div class="col-lg-2 text-end d-flex align-content-end text-nowrap text-end">
+                <a href="@Url.Action("Index", "FoodCatalogue")" class="text-decoration-none align-self-center"><span class="bi bi-plus text-success"></span> Add Food</a>
+            </div>
+        }
     </div>
     <div class="row border rounded mt-1 mb-3 p-2 pt-4 pb-4">
         <div class="col-lg-4">
@@ -73,12 +76,12 @@
             {
                 foreach (var calories in Model.ConsumedCaloriesHistory)
                 {
-                <a href="@Url.Action("Index", "MyDiary", new { dateDayParam = calories.Date.Day, dateMonthParam = calories.Date.Month, dateYearParam = calories.Date.Year})" class="text-decoration-none">
-                    <div class="row border border-light rounded p-2 mb-3">
-                        <div class="col">@calories.Date.Day/@calories.Date.Month/@calories.Date.Year - @calories.Date.DayOfWeek </div>
-                        <div class="col text-end">@calories.EnergySumOnDate kcal</div>
-                    </div>
-                </a>
+                    <a href="@Url.Action("Index", "MyDiary", new { dateDayParam = calories.Date.Day, dateMonthParam = calories.Date.Month, dateYearParam = calories.Date.Year})" class="text-decoration-none">
+                        <div class="row border border-light rounded p-2 mb-3">
+                            <div class="col">@calories.Date.Day/@calories.Date.Month/@calories.Date.Year - @calories.Date.DayOfWeek </div>
+                            <div class="col text-end">@calories.EnergySumOnDate kcal</div>
+                        </div>
+                    </a>
                 }
             }
             else
@@ -88,5 +91,5 @@
                 </div>
             }
         </div>
-     </div>
+    </div>
 </div>

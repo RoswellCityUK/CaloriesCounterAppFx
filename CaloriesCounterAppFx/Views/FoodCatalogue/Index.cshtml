@@ -42,11 +42,17 @@ Elements used to show some of the System Messages.
             -->
             @using (Html.BeginForm("Index", "FoodCatalogue", new { sortOrder = ViewBag.SortParam, categoryIdFilter = ViewBag.CategoryId }, FormMethod.Post, new { @class = "input-group mb-3" }))
             {
+                <!--
+                Searchbar input
+                -->
                 @Html.TextBox("SearchString", null, new { @class = "form-control", aria_lavel = "SearchString", aria_description = "bassic-addon1", placeholder = "Search" })
                 <button class="btn @(ViewBag.SearchParam == null ? "btn-outline-primary" : "btn-primary")"><i class="bi bi-search me-2"></i>Search</button>
                 <button type="button" class="btn @(ViewBag.CategoryId == null ? "btn-outline-primary" : "btn-primary") dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-funnel me-2"></i>Category
                 </button>
+                <!--
+                Categories Filter dropdown menu
+                -->
                 <ul class="dropdown-menu dropdown-menu-end fs-6">
                     @foreach (var category in Model.Categories)
                     {
@@ -67,6 +73,9 @@ Elements used to show some of the System Messages.
                         </li>
                     }
                 </ul>
+                <!--
+                Sort By dropdown menu
+                -->
                 <button type="button" class="btn btn-sm @(ViewBag.SortParam == null || ViewBag.SortParam == "name_asc" ? "btn-outline-primary" : "btn-primary") dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     Sort by
                 </button>
@@ -150,6 +159,9 @@ Elements used to show some of the System Messages.
         </div>
     </div>
 
+    <!--
+    Displaying food records rows
+    -->
     @foreach (var item in Model.Foods)
     {
         <div class="accordion-item">
@@ -170,6 +182,9 @@ Elements used to show some of the System Messages.
                 </div>
                 <div class="col-lg-6 ps-2 pe-2 mt-5 mt-lg-0 mb-5 mb-lg-0">
                     <ul class="list-group">
+                        <!--
+            Displaying Vitamins contained in the food
+            -->
                         <li class="list-group-item" style="border: 0">
                             Vitamins:
                             <span class="badge @(item.Nutrients.FirstOrDefault().VitAIU > 0? "bg-success" : "bg-light" )">Vit A</span>
@@ -180,6 +195,9 @@ Elements used to show some of the System Messages.
                             <span class="badge @(item.Nutrients.FirstOrDefault().VitEMg > 0? "bg-success" : "bg-light" )">Vit E</span>
                             <span class="badge @(item.Nutrients.FirstOrDefault().VitKΜg > 0? "bg-success" : "bg-light" )">Vit K</span>
                         </li>
+                        <!--
+            Displaying Elements contained in the food
+            -->
                         <li class="list-group-item" style="border: 0">
                             Elements:
                             <span class="badge @(item.Nutrients.FirstOrDefault().CalciumMg > 0? "bg-success" : "bg-light" )">Calcium</span>
@@ -196,11 +214,17 @@ Elements used to show some of the System Messages.
                         <li class="list-group-item" style="border: 0">Cholesterol: <span class="badge @(item.Nutrients.FirstOrDefault().CholestrlMg > 0? "bg-warning" : "bg-success" )">@item.Nutrients.FirstOrDefault().CholestrlMg mg</span></li>
                     </ul>
                 </div>
+                <!--
+                DIV containing JavaScript generated Chart with nutrition information
+                -->
                 <div class="col-lg-4">
                     <div class="chart-container" style="position: relative; max-height: 20vh">
                         <canvas id="myChart_@item.Id"></canvas>
                     </div>
                 </div>
+                <!--
+                Add food record to Diary form    
+                -->
                 @if (Request.IsAuthenticated)
                 {
                     <div class="col-lg"></div>
@@ -223,6 +247,9 @@ Elements used to show some of the System Messages.
                     </div>
                     <div class="col-lg"></div>
                 }
+                <!--
+                Configuration and Data for the specific Nutrition Chart
+                -->
                 <script>
                         const data_@item.Id = {
                             labels: [
@@ -268,6 +295,9 @@ Elements used to show some of the System Messages.
                             }
                         };
                 </script>
+                <!--
+                Attaching Chart to chosen DIV selector
+                -->
                 <script>
                         const myChart_@item.Id = new Chart(
                             document.getElementById('myChart_@item.Id'),
@@ -277,12 +307,26 @@ Elements used to show some of the System Messages.
             </div>
         </div>
     }
-    <div class="row mt-3">
-        <div class="col text-center">
-            Records from @(ViewBag.SkipRows + 1) to @(ViewBag.CurrentPage == ViewBag.NumberOfPages? @ViewBag.NumberOfRecords : ViewBag.CurrentPage * ViewBag.PageSize) of @ViewBag.NumberOfRecords total.
+    @if (ViewBag.NumberOfRecords > 0)
+    {
+        <div class="row mt-3">
+            <div class="col text-center">
+                Records from @(ViewBag.SkipRows + 1) to @(ViewBag.CurrentPage == ViewBag.NumberOfPages? @ViewBag.NumberOfRecords : ViewBag.CurrentPage * ViewBag.PageSize) of @ViewBag.NumberOfRecords total.
+            </div>
         </div>
-    </div>
-    @if (ViewBag.NumberOfpages != 1)
+    }
+    else
+    {
+        <div class="row mt-3">
+            <div class="col text-center">
+                Nothing was found for given search criteria.
+            </div>
+        </div>
+    }
+    <!--
+    Pagination    
+    -->
+    @if (ViewBag.NumberOfpages > 1 && ViewBag.NumberOfRecords > 0)
     {
         <div class="row mt-3">
             <div class="col text-center">
@@ -321,6 +365,9 @@ Elements used to show some of the System Messages.
     }
 
 </div>
+<!--
+Script responsible for chart better handling scaling and responsiveness
+-->
 <script>
     function beforePrintHandler() {
         for (let id in Chart.instances) {

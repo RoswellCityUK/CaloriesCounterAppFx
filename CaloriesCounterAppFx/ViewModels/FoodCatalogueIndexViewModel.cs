@@ -18,6 +18,8 @@ namespace CaloriesCounterAppFx.Models
         [Required]
         public int FoodId { get; set; }
         [Required]
+        [Display(Name = "Portion")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please enter valid integer Number bigger than 0")]
         public int PortionAmount { get; set; }
     }
 }
