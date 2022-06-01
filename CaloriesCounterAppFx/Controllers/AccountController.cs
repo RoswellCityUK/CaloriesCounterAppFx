@@ -15,6 +15,10 @@ namespace CaloriesCounterAppFx.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
+        //Class modified to extends BaseController
+        //needed for proper implementation of a LoginPartial with form in it
+        //Tomasz Grabowski 22/05/2022
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 

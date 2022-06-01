@@ -8,6 +8,7 @@ using System.Web.Mvc;
 namespace CaloriesCounterAppFx.Models
 {
     //View Model for passing data between My Diary Controller <-> View
+    //Tomasz Grabowski 22/05/2022
     public class MyDiaryViewModel : BaseViewModel
     {
         public DateTime Date { get; set; }

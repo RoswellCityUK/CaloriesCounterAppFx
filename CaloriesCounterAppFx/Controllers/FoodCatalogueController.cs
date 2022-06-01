@@ -12,8 +12,11 @@ namespace CaloriesCounterAppFx.Controllers
 {
     public class FoodCatalogueController : BaseController
     {
+        //Tomasz Grabowski 22/05/2022
+        //Controller for FoodCatalog extends from BaseController
+
         private ApplicationDbContext db = new ApplicationDbContext();
-        // GET: FoodCatalogue
+
         public ActionResult Index(string sortOrder, string searchString, string categoryIdFilter, int? page)
         {
             //Decoding HTML and other special chars like < and > to &lt; and &gt; to protect script from
@@ -80,24 +83,31 @@ namespace CaloriesCounterAppFx.Controllers
             int pageSize = 12;
             int pageNumber = (page ?? 1);
             int numberOfPages = numberOfRecords / pageSize;
+
+            //Adding one more page in case numberOfRecords does not divide fully by pageSize
             if((numberOfRecords % pageSize) != 0)
             {
                 numberOfPages++;
             }
+            //In case pageNumber given was less than 1
             if (pageNumber < 1)
                 pageNumber = 1;
+            
+            //In case pageNumber parameter will be bigger than number of calculated pages
             if (pageNumber > numberOfPages)
                 pageNumber = numberOfPages;
+
+            //Calculating how many records to skip in Db query
             int skipRows = (pageNumber - 1) * pageSize;
 
-            //Pasing pagination variables to View
+            //Passing pagination variables to View
             ViewBag.NumberOfRecords = numberOfRecords;
             ViewBag.PageSize = pageSize;
             ViewBag.CurrentPage = pageNumber;
             ViewBag.NumberOfPages = numberOfPages;
             ViewBag.SkipRows = skipRows;
 
-            //Skipping the appropriate number of records
+            //Skipping the appropriate number of records in query to db for given page
             if (numberOfRecords > 0)
             {
                 foods = foods.Skip(skipRows).Take(pageSize);

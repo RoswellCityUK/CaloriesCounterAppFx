@@ -12,6 +12,9 @@ namespace CaloriesCounterAppFx.Controllers
 {
     public class BaseController : Controller
     {
+        //Controller needed for the injection of BaseViewModel in other controllers
+        //That way I can inject LoginPartialViewModel without repeating and changing big parts of the code
+        //Tomasz Grabowski 22/05/2022
         protected virtual TModel CreateModel<TModel>() where TModel : BaseViewModel, new()
         {
             TModel model = new TModel();

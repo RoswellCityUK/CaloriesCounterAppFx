@@ -5,9 +5,10 @@ using System.Web;
 
 namespace CaloriesCounterAppFx.Models
 {
-    //Class used for reading Food Data from CSV files.
     public class FoodCsv
     {
+        //Class used in reading Food Data from CSV files.
+        //Tomasz Grabowski 22/05/2022
         public string ShrtDesc { get; set; }
         public string Category { get; set; }
         public double WaterG { get; set; }
@@ -44,9 +45,10 @@ namespace CaloriesCounterAppFx.Models
         public double CholestrlMg { get; set; }
     }
 
-    //Class Map used by CSVHelper when parsing the CSV files.
     public class FoodCsvClassMap : ClassMap<FoodCsv>
     {
+        //Class Map used by CSVHelper when parsing the CSV files.
+        //Tomasz Grabowski 22/05/2022
         public FoodCsvClassMap()
         {
             Map(m => m.ShrtDesc).Name("Shrt_Desc");

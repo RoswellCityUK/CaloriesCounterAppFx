@@ -6,9 +6,10 @@ using System.Web;
 
 namespace CaloriesCounterAppFx.Models
 {
-    //Entity Class responsible for keeping food data structured
     public class Food
     {
+        //Entity Class responsible for keeping food data structured
+        //Tomasz Grabowski 22/05/2022
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }

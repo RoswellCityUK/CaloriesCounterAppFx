@@ -6,6 +6,7 @@ namespace CaloriesCounterAppFx.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         //DbSets configured for all tables.
+        //Tomasz Grabowski 22/05/2022
         public DbSet<Food> Foods { get; set; }
         public DbSet<FoodCategory> FoodCategories { get; set; }
         public DbSet<FoodNutrient> FoodNutrients { get; set; }

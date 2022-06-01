@@ -2,9 +2,10 @@
 
 namespace CaloriesCounterAppFx.Models
 {
-    //Entity Class for Food Nutrient data
     public class FoodNutrient
     {
+        //Entity Class for Food Nutrient data
+        //Tomasz Grabowski 22/05/2022
         [Key]
         public int Id { get; set; }
         public virtual Food Food { get; set; }

@@ -6,15 +6,17 @@ using System.Web;
 
 namespace CaloriesCounterAppFx.Models
 {
-    //View Model for Food Catalog
     public class FoodCatalogueIndexViewModel : BaseViewModel
     {
+        //View Model for Food Catalog
+        //Tomasz Grabowski 22/05/2022
         public List<Food> Foods { get; set; }
         public List<FoodCategory> Categories { get; set; }
     }
-    //View Model for Food Diary Adding Form
     public class AddToDiaryViewModel
     {
+        //View Model for Food Diary Adding Form
+        //Tomasz Grabowski 22/05/2022
         [Required]
         public int FoodId { get; set; }
         [Required]

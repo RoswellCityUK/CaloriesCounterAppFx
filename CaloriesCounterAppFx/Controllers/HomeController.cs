@@ -6,10 +6,13 @@ using System.Web.Mvc;
 
 namespace CaloriesCounterAppFx.Controllers
 {
+    //Home controller for a static content pages
+    //Tomasz Grabowski 22/05/2022
     public class HomeController : BaseController
     {
         public ActionResult Index()
         {
+            //Redirecting logged in User to My Diary Index view
             if (Request.IsAuthenticated)
             {
                 return RedirectToAction("Index", "MyDiary");
@@ -19,43 +22,31 @@ namespace CaloriesCounterAppFx.Controllers
 
         public ActionResult KnowledgeBase()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult UnderstandCalories()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Podcasts()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult HowTo()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }

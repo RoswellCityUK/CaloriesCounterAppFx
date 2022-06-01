@@ -16,6 +16,10 @@ namespace CaloriesCounterAppFx.Controllers
         // GET: MyDiary
         public ActionResult Index(string dateDayParam, string dateMonthParam, string dateYearParam)
         {
+            //Main My Diary controller
+            //Tomasz Grabowski 22/05/2022
+
+            //Creating model based on BaseViewModel that includes LoginPartialViewModel
             MyDiaryViewModel model = base.CreateModel<MyDiaryViewModel>();
 
             int dateDay;
@@ -32,9 +36,11 @@ namespace CaloriesCounterAppFx.Controllers
             }
             model.Date = date;
 
+            //Getting current user Id
             string currentUserId = User.Identity.GetUserId();
             model.User = db.Users.Include(u => u.ConsumedCalories).Where(u => u.Id == currentUserId).FirstOrDefault(); ;
 
+            //contructing LINQ query for Consumed Calories table from User related entity
             model.ConsumedCaloriesOnDay = model.User.ConsumedCalories.AsQueryable().Where( c => c.DateAdded.Date == date.Date).ToList();
 
             model.EnergyOnDay = 0;
@@ -42,6 +48,8 @@ namespace CaloriesCounterAppFx.Controllers
             model.FatOnDay = 0;
             model.CarbsOnDay = 0;
             model.WeightOnDay = 0;
+            
+            //Calculating all the nutrition included in consumed food items
             foreach (ConsumedCalories calories in model.ConsumedCaloriesOnDay)
             {
                 var temp = calories.Food.Nutrients.FirstOrDefault();
@@ -53,17 +61,31 @@ namespace CaloriesCounterAppFx.Controllers
                 model.WeightOnDay += calories.Amount;
             }
 
-            model.ConsumedCaloriesHistory = model.User.ConsumedCalories.AsQueryable().OrderByDescending(c => c.DateAdded).GroupBy(c => c.DateAdded.Date).Select(x => new ConsumedCaloriesHistoryViewModel { Date = x.Key, EnergySumOnDate = x.Sum(e => e.Food.Nutrients.FirstOrDefault().EnergKcal / 100 * e.Amount) }).ToList();
+            //LINQ query to retrieve all the calories history data
+            model.ConsumedCaloriesHistory = model.User.ConsumedCalories.AsQueryable()
+                //Ordering by date for more intuitive layout
+                .OrderByDescending(c => c.DateAdded).GroupBy(c => c.DateAdded.Date)
+                //Selecting data from Database in a way that give us ConsumedCaloriesHistoryViewModel
+                .Select(x => new ConsumedCaloriesHistoryViewModel { Date = x.Key, EnergySumOnDate = x.Sum(e => e.Food.Nutrients.FirstOrDefault().EnergKcal / 100 * e.Amount) })
+                .ToList();
 
             return View(model);
         }
 
+        //Method for reseting Calories Counter
+        //Tomasz Grabowski 22/05/2022
         public ActionResult Reset() {
 
+            //Getting current user Id
             string currentUserId = User.Identity.GetUserId();
+
+            //Retrieving current User entity for DbContext including associated ConsumedCalories entities
             var currentUser = db.Users.Include(u => u.ConsumedCalories).Where(u => u.Id == currentUserId).FirstOrDefault();
+            //Filtering and retrieving ConsumedCalories for a given date
             var caloriesToDelete = currentUser.ConsumedCalories.Where(c => c.DateAdded.Date == DateTime.Today.Date).ToList();
             
+            //For some reason DbContext.ConsumedCalories.RemoveRange(caloriesToDelete) didn't gave assumed result
+            //so I had to make a small walk-around and attach every retreived entity to DbContext and then remove one-by-one
             foreach(ConsumedCalories calories in caloriesToDelete)
             {
                 var caloriesTemp = db.ConsumedCaloriesTable.Attach(calories);

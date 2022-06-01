@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 
 namespace CaloriesCounterAppFx.Models
 {
-    // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        //Class for User entity and associated data
+        //Tomasz Grabowski 22/05/2022
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -39,13 +40,12 @@ namespace CaloriesCounterAppFx.Models
         public bool IsRegisteredForNewsletter { get; set; }
     }
 
-    //Static method used to get amount of calories consumed for the logged user - displayed later in navbar and footer widgets.
     public static class ApplicationUserData
     {
+        //Static class that helps retrive amount of calories consumed in particular day for top navbar and footer widgets
+        //Tomasz Grabowski 22/05/2022
         public static double GetUserCaloriesConsumedToday(string currentUserId)
         {
-            //DbContext need to be inside static method instead of class to keep ChangeTracker working in Entity Framework
-            //Otherwise we would have two separate, asynchronous copies of the DbContext
             ApplicationDbContext db = new ApplicationDbContext();
             double caloriesAmount = 0;
 
